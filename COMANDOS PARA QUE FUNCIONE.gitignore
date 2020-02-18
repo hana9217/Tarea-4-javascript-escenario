@@ -1,0 +1,30 @@
+
+
+***Git Bash:***
+Poner ruta de carpeta Tarea_3 (cd ..)
+npm install
+npm run start
+http://localhost:8080/
+
+python -m http.server 8080
+
+
+
+
+
+# System and IDE files
+Thumbs.db
+.DS_Store
+.idea
+*.suo
+*.sublime-project
+*.sublime-workspace
+
+# Vendors
+node_modules/
+
+# Build
+dist/
+/npm-debug.log
+
+

@@ -1,0 +1,386 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Tarea 4 Javascript Escenario</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+
+    var config = {
+        type: Phaser.AUTO,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 0 },
+                debug: false
+            }
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update,
+        }
+    };
+
+    var player;
+    var stars;
+    //var platforms;
+    var cursors;
+    var score = 0;
+    var scoreText;
+    var scale = 1.1;
+    var vel = 10;
+    
+    var graphics;
+    var text;
+    var moveCam = false;
+
+    var iter = 0;//
+    var tilesprites = [];
+
+    var game = new Phaser.Game(config);
+    let fullscreen = this.add.image(16,16,'fullscreen').setInteractive()
+fullscreen.on('pointerup',()=>{window['game']['canvas'][game.device.fullscreen.request]();})
+
+
+    function preload ()
+    {
+        this.load.image('sky', 'assets/special.png');
+        this.load.image('ground', 'assets/platform.png');
+        this.load.image('star', 'assets/star.png');
+        this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 48, frameHeight: 48 });
+        
+    }
+
+function create ()
+    {
+        this.cameras.main.setBounds(0, 0, 3200, 1920);
+        //sky = this.add.tileSprite(0,0,960, 960, 'sky');
+   
+
+        var frames = ['a'];
+
+        for (var i = 0; i < frames.length; ++i) 
+        {
+            tilesprites[i] = this.add.tileSprite(i * 0, 0, 3200, 1920, 'sky', frames[i]);
+            tilesprites[i].setOrigin(0)
+        }
+        //platforms = this.physics.add.staticGroup();
+        //platforms.create(400, 826, 'ground').setScale(2).refreshBody();
+
+
+        player = this.physics.add.sprite(40, 40, 'dude');
+    
+        this.cameras.main.startFollow(player, true);
+        this.cameras.main.setZoom(1.5);
+
+       
+        //player.setCollideWorldBounds(true);//bordes area
+
+        this.anims.create({
+            key: 'turn',
+            frames: [ { key: 'dude', frame: 0 } ],
+            frameRate: 0
+        });
+
+
+       
+        cursors = this.input.keyboard.createCursorKeys();
+
+        stars = this.physics.add.group({      
+            key: 'star',
+            repeat: Math.floor((Math.random() * 4) +0 ),
+            setXY: { x: 17, y:Math.floor((Math.random() * 600) + 1)+200, stepX:  Math.floor(Math.random()*95) } 
+        });
+
+        bombs = this.physics.add.group();
+
+        scoreText = this.add.text(566, 16, 'score: 0', { fontSize: '32px', fill: '#cb4154' });
+        
+        this.physics.add.overlap(player, stars, collectStar, null, this);
+
+        this.input.on('pointermove', function (pointer) {
+
+        player.x = pointer.x;
+        player.y = pointer.y;
+        player.setVelocityX(vel);
+
+
+    
+        });
+
+    }
+
+
+    function update ()
+    {
+
+        var x = 0.5;
+
+        for (var i = 0; i < tilesprites.length; ++i) 
+        {
+            tilesprites[i].tilePositionX += x;
+            tilesprites[i].tilePositionY += x;
+        }
+
+        iter += 0.01;
+
+        if (cursors.left.isDown)
+        {
+            //player.setVelocityX(-160);
+
+            //player.anims.play('left', true);
+        }
+        else if (cursors.right.isDown)
+        {
+            //player.setVelocityX(160);
+
+            //player.anims.play('right', true);
+        }
+        else
+        {
+            player.setVelocityX(0);
+
+            player.anims.play('turn');
+        }
+
+        if (cursors.up.isDown && player.body.touching.down)
+        {
+            player.setVelocityY(-420);
+        }
+
+         if (cursors.right.isDown){
+        player.x += vel;
+        }
+        else if (cursors.left.isDown)
+        {
+            player.x -= vel;
+        }
+        else if (cursors.up.isDown)
+        {
+            player.y -= vel;
+        }
+        else if (cursors.down.isDown)
+        {
+        player.y += vel;
+        }
+        else
+    {
+        if (cursors.left.isDown)
+        {
+            player.setVelocityX(-400);
+        }
+        else if (cursors.right.isDown)
+        {
+            player.setVelocityX(400);
+        }
+    
+        if (cursors.up.isDown)
+        {
+            player.setVelocityY(-400);
+        }
+        else if (cursors.down.isDown)
+        {
+            player.setVelocityY(400);
+        }
+    }
+
+    }
+
+    function collectStar (player, star)
+    {
+        star.disableBody(true, true);//crece solo
+
+        score += 10;
+        scoreText.setText('Score: ' + score);
+
+        if (stars.countActive(true) === 5 )
+         {
+            stars.children.iterate(function (child) {
+
+                //child.enableBody(true, child.x, 0, true, true);
+            });
+
+            var x = (player.x < 960) ? Phaser.Math.Between(260, 3200) : Phaser.Math.Between(0, 3200);
+            var y = (player.y < 960) ? Phaser.Math.Between(1920, 960) : Phaser.Math.Between(0, 960);
+
+
+            var star = stars.create(700, 600, 'star');
+            var star = stars.create(x, 300, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(300, y, 'star');
+            var star = stars.create(50, 750, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 2, 'star')
+            var star = stars.create(600, 800, 'star');
+            var star = stars.create(x, 200, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(300, y, 'star');
+            var star = stars.create(50, 750, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 2, 'star')
+            var star = stars.create(1900, 1900, 'star');
+            var star = stars.create(x, 900, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(1300, y, 'star');
+            var star = stars.create(50, 1750, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 2, 'star')
+
+            var star = stars.create(2900, 700, 'star');
+            var star = stars.create(x, 400, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(3100, y, 'star');
+            var star = stars.create(30, 950, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 5, 'star')
+            var star = stars.create(1800, 1600, 'star');
+            var star = stars.create(x, 100, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(400, y, 'star');
+            var star = stars.create(20, 850, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 4, 'star')
+            var star = stars.create(1800, 1800, 'star');
+            var star = stars.create(x, 950, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(1400, y, 'star');
+            var star = stars.create(30, 2850, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 3150, 'star')
+          
+        }
+
+        if (stars.countActive(true) === 3)
+        {
+            stars.children.iterate(function (child) {
+
+                //child.enableBody(true, child.x, 0, true, true);
+            });
+
+           var x = (player.x < 960) ? Phaser.Math.Between(260, 3200) : Phaser.Math.Between(0, 3200);
+            var y = (player.y < 960) ? Phaser.Math.Between(1920, 960) : Phaser.Math.Between(0, 960);
+
+
+            var star = stars.create(700, 600, 'star');
+            var star = stars.create(x, 300, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(300, y, 'star');
+            var star = stars.create(50, 750, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 2, 'star')
+            var star = stars.create(600, 800, 'star');
+            var star = stars.create(x, 200, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(300, y, 'star');
+            var star = stars.create(50, 750, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 2, 'star')
+            var star = stars.create(1900, 1900, 'star');
+            var star = stars.create(x, 900, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(1300, y, 'star');
+            var star = stars.create(50, 1750, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 2, 'star')
+
+            var star = stars.create(2900, 700, 'star');
+            var star = stars.create(x, 400, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(3100, y, 'star');
+            var star = stars.create(30, 950, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 5, 'star')
+            var star = stars.create(1800, 1600, 'star');
+            var star = stars.create(x, 100, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(400, y, 'star');
+            var star = stars.create(20, 850, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 4, 'star')
+            var star = stars.create(1800, 1800, 'star');
+            var star = stars.create(x, 950, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(1400, y, 'star');
+            var star = stars.create(30, 2850, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 3150, 'star')
+          
+          
+        }
+
+        if (stars.countActive(true) === 1)
+        {
+            stars.children.iterate(function (child) {
+
+                //child.enableBody(true, child.x, 0, true, true);
+            });
+
+            var x = (player.x < 960) ? Phaser.Math.Between(260, 3200) : Phaser.Math.Between(0, 3200);
+            var y = (player.y < 960) ? Phaser.Math.Between(1920, 960) : Phaser.Math.Between(0, 960);
+
+
+            var star = stars.create(700, 600, 'star');
+            var star = stars.create(x, 300, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(300, y, 'star');
+            var star = stars.create(50, 750, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 2, 'star')
+            var star = stars.create(600, 800, 'star');
+            var star = stars.create(x, 200, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(300, y, 'star');
+            var star = stars.create(50, 750, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 2, 'star')
+
+            var star = stars.create(2900, 700, 'star');
+            var star = stars.create(x, 400, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(3100, y, 'star');
+            var star = stars.create(30, 950, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 5, 'star')
+            var star = stars.create(1800, 1600, 'star');
+            var star = stars.create(x, 100, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(400, y, 'star');
+            var star = stars.create(20, 850, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 4, 'star')
+            var star = stars.create(1800, 1800, 'star');
+            var star = stars.create(x, 950, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(1400, y, 'star');
+            var star = stars.create(30, 2850, 'star');
+            var star = stars.create(x, y, 'star');
+            var star = stars.create(x, 3150, 'star')
+        }
+        
+        player.setScale(scale);
+        scale += 0.03;
+        vel -= 0.03;
+    }
+
+
+    
+    
+
+
+
+</script>
+
+</body>
+</html>
