@@ -40,7 +40,7 @@
     var score = 0;
     var scoreText;
     var scale = 1.1;
-    var vel = 10;
+    var vel = 12;
     
     var graphics;
     var text;
@@ -100,7 +100,7 @@ function create ()
 
         stars = this.physics.add.group({      
             key: 'star',
-            repeat: Math.floor((Math.random() * 4) +0 ),
+            repeat: Math.floor((Math.random() * 6) +1 ),
             setXY: { x: 17, y:Math.floor((Math.random() * 600) + 1)+200, stepX:  Math.floor(Math.random()*95) } 
         });
 
@@ -205,178 +205,57 @@ function create ()
         score += 10;
         scoreText.setText('Score: ' + score);
 
-        if (stars.countActive(true) === 5 )
+        if (stars.countActive(true) === 5 || 7)
          {
             stars.children.iterate(function (child) {
 
                 //child.enableBody(true, child.x, 0, true, true);
             });
 
-            var x = (player.x < 960) ? Phaser.Math.Between(260, 3200) : Phaser.Math.Between(0, 3200);
-            var y = (player.y < 960) ? Phaser.Math.Between(1920, 960) : Phaser.Math.Between(0, 960);
+            var x = (player.x < 1600) ? Phaser.Math.Between(1600, 3200) : Phaser.Math.Between(0, 1600);
+            var y = (player.y < 960) ? Phaser.Math.Between(960, 1920) : Phaser.Math.Between(0, 960);
 
-
-            var star = stars.create(700, 600, 'star');
-            var star = stars.create(x, 300, 'star');
             var star = stars.create(x, y, 'star');
-            var star = stars.create(300, y, 'star');
-            var star = stars.create(50, 750, 'star');
             var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 2, 'star')
-            var star = stars.create(600, 800, 'star');
-            var star = stars.create(x, 200, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(300, y, 'star');
-            var star = stars.create(50, 750, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 2, 'star')
-            var star = stars.create(1900, 1900, 'star');
-            var star = stars.create(x, 900, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(1300, y, 'star');
-            var star = stars.create(50, 1750, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 2, 'star')
-
-            var star = stars.create(2900, 700, 'star');
-            var star = stars.create(x, 400, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(3100, y, 'star');
-            var star = stars.create(30, 950, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 5, 'star')
-            var star = stars.create(1800, 1600, 'star');
-            var star = stars.create(x, 100, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(400, y, 'star');
-            var star = stars.create(20, 850, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 4, 'star')
-            var star = stars.create(1800, 1800, 'star');
-            var star = stars.create(x, 950, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(1400, y, 'star');
-            var star = stars.create(30, 2850, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 3150, 'star')
           
         }
 
-        if (stars.countActive(true) === 3)
+        if (stars.countActive(true) === 3 || 4)
         {
             stars.children.iterate(function (child) {
 
                 //child.enableBody(true, child.x, 0, true, true);
             });
 
-           var x = (player.x < 960) ? Phaser.Math.Between(260, 3200) : Phaser.Math.Between(0, 3200);
-            var y = (player.y < 960) ? Phaser.Math.Between(1920, 960) : Phaser.Math.Between(0, 960);
-
-
-            var star = stars.create(700, 600, 'star');
-            var star = stars.create(x, 300, 'star');
+            var x = (player.x < 3200) ? Phaser.Math.Between(260, 3200) : Phaser.Math.Between(0, 3200);
+            var y = (player.y < 1920) ? Phaser.Math.Between(920, 1920) : Phaser.Math.Between(0, 1920);
+            
             var star = stars.create(x, y, 'star');
-            var star = stars.create(300, y, 'star');
-            var star = stars.create(50, 750, 'star');
             var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 2, 'star')
-            var star = stars.create(600, 800, 'star');
-            var star = stars.create(x, 200, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(300, y, 'star');
-            var star = stars.create(50, 750, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 2, 'star')
-            var star = stars.create(1900, 1900, 'star');
-            var star = stars.create(x, 900, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(1300, y, 'star');
-            var star = stars.create(50, 1750, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 2, 'star')
-
-            var star = stars.create(2900, 700, 'star');
-            var star = stars.create(x, 400, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(3100, y, 'star');
-            var star = stars.create(30, 950, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 5, 'star')
-            var star = stars.create(1800, 1600, 'star');
-            var star = stars.create(x, 100, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(400, y, 'star');
-            var star = stars.create(20, 850, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 4, 'star')
-            var star = stars.create(1800, 1800, 'star');
-            var star = stars.create(x, 950, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(1400, y, 'star');
-            var star = stars.create(30, 2850, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 3150, 'star')
-          
-          
+             
         }
 
-        if (stars.countActive(true) === 1)
+        if (stars.countActive(true) === 0 & 1)
         {
             stars.children.iterate(function (child) {
 
                 //child.enableBody(true, child.x, 0, true, true);
             });
 
-            var x = (player.x < 960) ? Phaser.Math.Between(260, 3200) : Phaser.Math.Between(0, 3200);
-            var y = (player.y < 960) ? Phaser.Math.Between(1920, 960) : Phaser.Math.Between(0, 960);
-
-
-            var star = stars.create(700, 600, 'star');
-            var star = stars.create(x, 300, 'star');
+            var x = (player.x < 3200) ? Phaser.Math.Between(260, 3200) : Phaser.Math.Between(0, 3200);
+            var y = (player.y < 1920) ? Phaser.Math.Between(920, 1920) : Phaser.Math.Between(0, 1920);
+            
             var star = stars.create(x, y, 'star');
-            var star = stars.create(300, y, 'star');
-            var star = stars.create(50, 750, 'star');
             var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 2, 'star')
-            var star = stars.create(600, 800, 'star');
-            var star = stars.create(x, 200, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(300, y, 'star');
-            var star = stars.create(50, 750, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 2, 'star')
-
-            var star = stars.create(2900, 700, 'star');
-            var star = stars.create(x, 400, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(3100, y, 'star');
-            var star = stars.create(30, 950, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 5, 'star')
-            var star = stars.create(1800, 1600, 'star');
-            var star = stars.create(x, 100, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(400, y, 'star');
-            var star = stars.create(20, 850, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 4, 'star')
-            var star = stars.create(1800, 1800, 'star');
-            var star = stars.create(x, 950, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(1400, y, 'star');
-            var star = stars.create(30, 2850, 'star');
-            var star = stars.create(x, y, 'star');
-            var star = stars.create(x, 3150, 'star')
         }
         
         player.setScale(scale);
         scale += 0.03;
         vel -= 0.03;
+
+        if(vel <= 0.4)
+            {vel = 0.4}
     }
-
-
-    
-    
 
 
 
