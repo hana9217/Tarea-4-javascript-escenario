@@ -95,6 +95,8 @@ function create ()
         });
 
 
+
+
        
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -161,19 +163,36 @@ function create ()
         }
 
          if (cursors.right.isDown){
-        player.x += vel;
+            player.x += vel;
+
+            if(player.x === 0,0,0,1)
+            {
+                player.x = Phaser.Math.Wrap(player.x - 1, 0, 3200);
+            }
         }
         else if (cursors.left.isDown)
         {
             player.x -= vel;
+            if(player.x === 0,0,0,1)
+            {
+                player.x = Phaser.Math.Wrap(player.x + 1, 0, 3200);
+            }
         }
         else if (cursors.up.isDown)
         {
             player.y -= vel;
+            if(player.y === 0,0,0,1)
+            {
+                player.y = Phaser.Math.Wrap(player.y - 1, 0, 1920);
+            }
         }
         else if (cursors.down.isDown)
         {
-        player.y += vel;
+            player.y += vel;
+            if(player.y === 0,0,0,1920)
+            {
+                player.y = Phaser.Math.Wrap(player.y + 1, 0, 1920);
+            }
         }
         else
     {
@@ -216,7 +235,7 @@ function create ()
             var y = (player.y < 960) ? Phaser.Math.Between(960, 1920) : Phaser.Math.Between(0, 960);
 
             var star = stars.create(x, y, 'star');
-            var star = stars.create(x, y, 'star');
+            //var star = stars.create(x, y, 'star');
           
         }
 
@@ -231,7 +250,7 @@ function create ()
             var y = (player.y < 1920) ? Phaser.Math.Between(920, 1920) : Phaser.Math.Between(0, 1920);
             
             var star = stars.create(x, y, 'star');
-            var star = stars.create(x, y, 'star');
+            //var star = stars.create(x, y, 'star');
              
         }
 
@@ -246,12 +265,24 @@ function create ()
             var y = (player.y < 1920) ? Phaser.Math.Between(920, 1920) : Phaser.Math.Between(0, 1920);
             
             var star = stars.create(x, y, 'star');
-            var star = stars.create(x, y, 'star');
+           // var star = stars.create(x, y, 'star');
         }
         
         player.setScale(scale);
-        scale += 0.03;
         vel -= 0.03;
+
+        if(scale <= 9)
+        {
+            scale += 0.03;
+        }
+        else if(scale >= 9)
+        {
+            scale += 0.01;
+        }
+        else if(scale >= 45)
+        {
+            scale = 46;
+        }
 
         if(vel <= 0.4)
             {vel = 0.4}
